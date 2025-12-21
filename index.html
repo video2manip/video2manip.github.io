@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Web2Grasp</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- <meta name="author" content="anonymous"> -->
+    <!-- <meta name="description" content=""> -->
+    <meta name="viewport" content="width=800px, initial-scale=0.8, maximum-scale=2.0, user-scalable=yes">
+    <meta name="google-site-verification" content="ky_GtW3ix1x6MhH-pM6PonkpJCmE-237rRUvxvyQjVs" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+    <link rel="icon" href="./static/image/favicon.png">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+    <script src="./static/js/index.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>        
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      });
+    </script>
+
+    <!-- visitor statistics -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <!-- model-viewer -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  </head>
+
+
+  <body>
+    <!-- Title -->
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <h1 class="title is-1 publication-title"><strong>Web2Grasp</strong>: Learning Functional Grasps from Web Images of Hand-Object Interactions</h1>
+              <div class="column has-text-centered">
+                <div class="publication-links">
+                  <!-- PDF Link -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Intro Video -->
+    <!-- Intro Video -->
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body">
+          <video id="intro" controls playsinline height="100%" class="video-with-border">
+            <source src="./static/data/intro_video.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <!-- Abstract -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Abstract</h2>
+            <div class="content has-text-justified">
+              <p>
+                Functional grasping is essential for enabling dexterous multi-finger robot hands to manipulate objects effectively. Prior work largely focuses on power grasps, which only involve holding an object, or relies on in-domain demonstrations for specific objects. 
+                We propose leveraging human grasp information extracted from web images, which capture natural and functional hand–object interactions (HOI).
+                Using a pretrained 3D reconstruction model, we recover 3D human HOI meshes from RGB images. To train on these noisy HOI data, we propose to use: 1) an interaction-centric model to learn the functional interaction pattern between hand and object, and 2) geometry-based filtering to remove the infeasible grasps and physical simulation to retain grasps who can resist disturbance. 
+                In IssacGym simulation, our model trained on reconstructed HOI grasps achieves a 75.8% success rate on objects from the web dataset and generalizes to unseen objects, yielding a 6.7% improvement in success rate and a 1.8$\times$ increase in functionality ratings compared to baselines. In real-world experiments with the LEAP hand and Inspire hand, it attains a 77.5% success rate across 12 objects, including challenging ones such as a syringe, spray bottle, knife, and tongs. 
+              </p>
+            </div>
+          </div>
+        </div>
+        <!--/ Abstract -->
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <!-- Overview -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Pipeline Overview</h2>
+            <div class="content has-text-justified">
+              <figure>
+                <img src="./static/image/pipeline.png" alt="Overview of the Web2Grasp framework">
+                <figcaption style="font-style: normal; font-size: 0.95em;">We propose <strong>Web2Grasp</strong> for autonomously obtaining robot grasp data by reconstructing Hand-Object meshes from Web images and how to train dexterous grasping model using the noisy reconstructed HOI data. We demonstrate that the resulting dataset obtained via web images and not requiring any robot-specific teleoperation enables training a supervised learning model with strong grasping performance both in simulation and in the real-world. </figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+        <!--/ Overview -->
+      </div>
+    </section>
+
+
+
+
+
+    
+    <!-- Reconstruction Grasps -->
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column">
+            <h2 class="title is-3 has-text-centered">Reconstructed HOI from Web Images</h2>
+            <div class="columns is-centered">
+              <div class="column is-two-third">
+                <div class="content has-text-justified">
+                  <p class="has-text-centered" style="margin-top: -10px; margin-bottom: 20px;">
+                    We reconstruct human HOI from web images of humans holding objects, retarget the human hand mesh to the multi-fingered robot, and align the noisy object meshes with 3D shapes generated by the text-to-3D tool Meshy AI.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="columns is-centered has-text-centered">
+          <!-- Model Viewers for Reconstructed HOI -->
+          <div class="column is-one-quarter" style="display: flex; flex-direction: column; align-items: center;">
+            <model-viewer
+              id="modelViewerHOI0"
+              src="static/data/HOI/shadowhand/power_drill/0.glb"
+              alt="Reconstructed HOI 0"
+              ar
+              camera-controls
+              auto-rotate
+              auto-rotate-delay="1000"
+              interaction-prompt-threshold="2000"
+              exposure="1.2"
+              shadow-intensity="1"
+              environment-image="neutral"
+              style="width: 200px; height: 200px; border: 3px solid #66c0ff; border-radius: 15px;">
+            </model-viewer>
+            <p style="font-size: 20px; font-weight: bold;">Grasp 0</p>
+          </div>
+
+          <div class="column is-one-quarter" style="display: flex; flex-direction: column; align-items: center;">
+            <model-viewer
+              id="modelViewerHOI1"
+              src="static/data/HOI/shadowhand/power_drill/1.glb"
+              alt="Reconstructed HOI 1"
+              ar
+              camera-controls
+              auto-rotate
+              auto-rotate-delay="1000"
+              interaction-prompt-threshold="2000"
+              exposure="1.2"
+              shadow-intensity="1"
+              environment-image="neutral"
+              style="width: 200px; height: 200px; border: 3px solid #66c0ff; border-radius: 15px;">
+            </model-viewer>
+            <p style="font-size: 20px; font-weight: bold;">Grasp 1</p>
+          </div>
+
+          <div class="column is-one-quarter" style="display: flex; flex-direction: column; align-items: center;">
+            <model-viewer
+              id="modelViewerHOI2"
+              src="static/data/HOI/shadowhand/power_drill/2.glb"
+              alt="Reconstructed HOI 2"
+              ar
+              camera-controls
+              auto-rotate
+              auto-rotate-delay="1000"
+              interaction-prompt-threshold="2000"
+              exposure="1.2"
+              shadow-intensity="1"
+              environment-image="neutral"
+              style="width: 200px; height: 200px; border: 3px solid #66c0ff; border-radius: 15px;">
+            </model-viewer>
+            <p style="font-size: 20px; font-weight: bold;">Grasp 2</p>
+          </div>
+
+          <!-- Controls for Object Selection -->
+          <div class="column is-one-quarter">
+            <!-- Robot Selection Dropdown -->
+            <div class="dropdown-container" style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
+              <label for="robotNameHOI" style="font-size: 20px; font-weight: bold;">Robot Hand</label>
+              <select id="robotNameHOI" class="custom-select" style="width: 200px; margin-top: 10px;">
+                <option value="shadowhand" style="font-size: 14px;">ShadowHand</option>
+                <option value="leaphand" style="font-size: 14px;">LeapHand</option>
+              </select>
+            </div>
+
+            <!-- Object Name Dropdown -->
+            <div class="dropdown-container" style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
+              <label for="objectNameHOI" style="font-size: 20px; font-weight: bold;">Object Name</label>
+              <select id="objectNameHOI" class="custom-select" style="width: 200px; margin-top: 10px;">
+                <option value="power_drill" style="font-size: 14px;">power_drill</option>
+                <option value="longsword" style="font-size: 14px;">longsword</option>
+                <option value="microphone" style="font-size: 14px;">microphone</option>
+                <option value="mug" style="font-size: 14px;">mug</option>
+                <option value="pen" style="font-size: 14px;">pen</option>
+                <option value="phone" style="font-size: 14px;">phone</option>
+                <option value="spray" style="font-size: 14px;">spray</option>
+                <option value="syringe" style="font-size: 14px;">syringe</option>
+                <option value="tong" style="font-size: 14px;">tong</option>
+                <option value="wine_glass" style="font-size: 14px;">wine_glass</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Functional Grasp Predictions -->
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column">
+            <h2 class="title is-3 has-text-centered">Functional Grasp Predictions</h2>
+            <div class="columns is-centered">
+              <div class="column is-two-third">
+                <div class="content has-text-justified">
+                  <p class="has-text-centered" style="margin-top: -10px; margin-bottom: 20px;">
+                    Using these reconstructed HOI as training data, we train the interaction-centric grasping model DRO. 
+                    The results show that our model can predict functional grasps using reconstructed HOI from web images, and generalize to held-out unseen objects.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Object Carousel -->
+        <div class="object-carousel-container" style="position: relative; margin: 20px 0; overflow: hidden; width: 100%; max-width: 1000px; margin-left: auto; margin-right: auto;">
+          <!-- Left Arrow -->
+          <button id="carousel-left" class="carousel-arrow carousel-left" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(102, 192, 255, 0.8); border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white;">
+            &#8249;
+          </button>
+          
+          <!-- Right Arrow -->
+          <button id="carousel-right" class="carousel-arrow carousel-right" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(102, 192, 255, 0.8); border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white;">
+            &#8250;
+          </button>
+
+          <!-- Scrollable Object Row -->
+          <div id="object-carousel" style="display: flex; padding: 20px 80px; transition: transform 0.3s ease; overflow: visible; width: max-content;">
+            <!-- Object items will be populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // HOI Model Viewers
+      const modelViewerHOI0 = document.getElementById('modelViewerHOI0');
+      const modelViewerHOI1 = document.getElementById('modelViewerHOI1');
+      const modelViewerHOI2 = document.getElementById('modelViewerHOI2');
+      const objectNameSelectHOI = document.getElementById('objectNameHOI');
+      const robotNameSelectHOI = document.getElementById('robotNameHOI');
+
+      // Define available objects for each robot
+      const availableObjects = {
+        shadowhand: [
+          'power_drill', 'microphone', 'mug', 'pen', 'phone',
+          'spray', 'syringe', 'tong', 'wine_glass', 'longsword'
+        ],
+        leaphand: [
+          'power_drill', 'microphone', 'mug', 'phone',
+          'spray', 'syringe', 'tong', 'wine_glass'
+        ]
+      };
+
+      function updateObjectList() {
+        const selectedRobot = robotNameSelectHOI.value;
+        const objectSelect = objectNameSelectHOI;
+        
+        // Clear current options
+        objectSelect.innerHTML = '';
+        
+        // Add new options based on selected robot
+        availableObjects[selectedRobot].forEach(object => {
+          const option = document.createElement('option');
+          option.value = object;
+          option.text = object;
+          option.style.fontSize = '14px';
+          objectSelect.appendChild(option);
+        });
+
+        // Update models with new robot and first available object
+        updateModelHOI();
+      }
+
+      function updateModelHOI() {
+        const selectedObject = objectNameSelectHOI.value;
+        const selectedRobot = robotNameSelectHOI.value;
+        modelViewerHOI0.src = `static/data/HOI/${selectedRobot}/${selectedObject}/0.glb`;
+        modelViewerHOI1.src = `static/data/HOI/${selectedRobot}/${selectedObject}/1.glb`;
+        modelViewerHOI2.src = `static/data/HOI/${selectedRobot}/${selectedObject}/2.glb`;
+      }
+
+      robotNameSelectHOI.addEventListener('change', updateObjectList);
+      objectNameSelectHOI.addEventListener('change', updateModelHOI);
+
+      // Initialize with default robot
+      updateObjectList();
+
+      // Functional Grasp Carousel
+      const objectCarousel = document.getElementById('object-carousel');
+      const carouselLeft = document.getElementById('carousel-left');
+      const carouselRight = document.getElementById('carousel-right');
+      
+      const objects = [
+        'axe', 'fire_torch', 'hammer', 'longsword', 'microphone', 'mug',
+        'pen', 'phone', 'power_drill', 'remote', 'soap_bottle', 'spray',
+        'syringe', 'teapot', 'tong', 'whip', 'whisk', 'wine_glass', 'writing_brush'
+      ];
+
+      let currentIndex = 0;
+      const itemsPerView = 4;
+      const itemWidth = 220; // 200px model + 20px gap
+
+      // Create carousel items
+      function createCarouselItems() {
+        objectCarousel.innerHTML = '';
+        objects.forEach((object, index) => {
+          const item = document.createElement('div');
+          item.className = 'carousel-item';
+          item.style.cssText = 'flex: 0 0 200px; display: flex; flex-direction: column; align-items: center; margin-right: 20px;';
+          
+          item.innerHTML = `
+            <model-viewer
+              src="static/data/3dmodel/ShadowHand/${object}/0.glb"
+              alt="${object} Grasp"
+              ar
+              camera-controls
+              auto-rotate
+              auto-rotate-delay="1000"
+              interaction-prompt-threshold="2000"
+              exposure="1.2"
+              shadow-intensity="1"
+              environment-image="neutral"
+              style="width: 200px; height: 200px; border: 3px solid #66c0ff; border-radius: 15px;">
+            </model-viewer>
+            <p style="font-size: 16px; font-weight: bold; margin-top: 10px; text-transform: capitalize;">${object.replace('_', ' ')}</p>
+          `;
+          
+          objectCarousel.appendChild(item);
+        });
+        
+        // Debug: log total items created
+        console.log(`Created ${objects.length} carousel items`);
+      }
+
+
+
+      // Scroll carousel
+      function scrollCarousel(direction) {
+        // Calculate max index to ensure all objects are viewable
+        // For 19 objects with 4 items per view, we need positions 0-15 (16 positions total)
+        const maxIndex = Math.max(0, objects.length - itemsPerView);
+        
+        if (direction === 'left') {
+          currentIndex = Math.max(0, currentIndex - 1);
+        } else if (direction === 'right') {
+          currentIndex = Math.min(maxIndex, currentIndex + 1);
+        }
+        // If no direction provided (initialization), keep current index
+        
+        const translateX = -(currentIndex * itemWidth);
+        objectCarousel.style.transform = `translateX(${translateX}px)`;
+        
+        // Update arrow visibility
+        carouselLeft.style.opacity = currentIndex === 0 ? '0.5' : '1';
+        carouselRight.style.opacity = currentIndex === maxIndex ? '0.5' : '1';
+        
+        // Debug info - can be removed later
+        console.log(`Current index: ${currentIndex}, Max index: ${maxIndex}, Total objects: ${objects.length}, Showing objects ${currentIndex + 1}-${Math.min(currentIndex + itemsPerView, objects.length)}`);
+      }
+
+      // Event listeners
+      carouselLeft.addEventListener('click', () => scrollCarousel('left'));
+      carouselRight.addEventListener('click', () => scrollCarousel('right'));
+
+      // Initialize carousel
+      createCarouselItems();
+      scrollCarousel(); // Initialize arrow states
+    </script>
+    <!--/ Simulation Grasps -->
+
+     <!-- Partial Observation Grasps -->
+
+    <!--/ Partial Observation Grasps -->
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column">
+            <h2 class="title is-3 has-text-centered">Real-world Demos</h2>
+            <p class="has-text-centered" style="margin-top: -10px; margin-bottom: 20px; font-style: italic;">All videos are sped up by 2.25 times</p>
+          </div>
+        </div>
+    
+        <div class="columns is-centered has-text-centered">
+          <section class="video-section" style="display: flex; padding: 20px;">
+            <div class="main-video-container" style="flex: 2; margin-top: 25px; margin-right: 50px; text-align: center;">
+              <video id="main-video" autoplay muted loop playsinline style="width: 700px;" class="video-with-border">
+                <source src="static/data/realworld/tong.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          
+            <div class="covers-container" style="flex: 1; overflow-y: auto; height: 600px; display: flex; flex-direction: column; align-items: center;">
+              <div class="video-cover" onclick="changeVideo('static/data/realworld/wine_glass.mp4')" style="margin-bottom: 10px; cursor: pointer;">
+                <img src="static/data/realworld/wine_glass.png" alt="wine glass Cover" style="width: 120px; height: 120px;">
+                <p style="text-align: center;">Wine Glass</p>
+              </div>
+            
+              <div class="video-cover" onclick="changeVideo('static/data/realworld/tong.mp4')" style="margin-bottom: 10px; cursor: pointer;">
+                <img src="static/data/realworld/tong.png" alt="tong Cover" style="width: 120px; height: 120px;">
+                <p style="text-align: center;">Tong</p>
+              </div>
+            
+              <div class="video-cover" onclick="changeVideo('static/data/realworld/phone.mp4')" style="margin-bottom: 10px; cursor: pointer;">
+                <img src="static/data/realworld/phone.png" alt="Phone Cover" style="width: 120px; height: 120px;">
+                <p style="text-align: center;">Phone</p>
+              </div>
+            
+              <div class="video-cover" onclick="changeVideo('static/data/realworld/power_drill.mp4')" style="margin-bottom: 10px; cursor: pointer;">
+                <img src="static/data/realworld/power_drill.png" alt="Power Drill Cover" style="width: 120px; height: 120px;">
+                <p style="text-align: center;">Power Drill</p>
+              </div>
+            
+              <div class="video-cover" onclick="changeVideo('static/data/realworld/mug.mp4')" style="margin-bottom: 10px; cursor: pointer;">
+                <img src="static/data/realworld/mug.png" alt="Mug Cover" style="width: 120px; height: 120px;">
+                <p style="text-align: center;">Mug</p>
+              </div>
+
+              <div class="video-cover" onclick="changeVideo('static/data/realworld/microphone.mp4')" style="margin-bottom: 10px; cursor: pointer;">
+                <img src="static/data/realworld/microphone.png" alt="Microphone Cover" style="width: 120px; height: 120px;">
+                <p style="text-align: center;">Microphone</p>
+              </div>
+              
+              <div class="video-cover" onclick="changeVideo('static/data/realworld/spray.mp4')" style="margin-bottom: 10px; cursor: pointer;">
+                <img src="static/data/realworld/spray.png" alt="Spray Cover" style="width: 120px; height: 120px;">
+                <p style="text-align: center;">Spray</p>
+              </div>
+            
+              <div class="video-cover" onclick="changeVideo('static/data/realworld/syringe.mp4')" style="margin-bottom: 10px; cursor: pointer;">
+                <img src="static/data/realworld/syringe.png" alt="Syringe Cover" style="width: 120px; height: 120px;">
+                <p style="text-align: center;">Syringe</p>
+              </div>
+
+              <div class="video-cover" onclick="changeVideo('static/data/realworld/bowl.mp4')" style="margin-bottom: 10px; cursor: pointer;">
+                <img src="static/data/realworld/bowl.jpg" alt="Bowl Cover" style="width: 120px; height: 120px;">
+                <p style="text-align: center;">Bowl</p>
+              </div>
+
+              <div class="video-cover" onclick="changeVideo('static/data/realworld/plate.mp4')" style="margin-bottom: 10px; cursor: pointer;">
+                <img src="static/data/realworld/plate.png" alt="Plate Cover" style="width: 120px; height: 120px;">
+                <p style="text-align: center;">Plate</p>
+              </div>
+
+              <div class="video-cover" onclick="changeVideo('static/data/realworld/fork.mp4')" style="margin-bottom: 10px; cursor: pointer;">
+                <img src="static/data/realworld/fork.jpg" alt="Fork Cover" style="width: 120px; height: 120px;">
+                <p style="text-align: center;">Fork</p>
+              </div>
+
+              <div class="video-cover" onclick="changeVideo('static/data/realworld/knife.mp4')" style="margin-bottom: 10px; cursor: pointer;">
+                <img src="static/data/realworld/knife.jpg" alt="Knife Cover" style="width: 120px; height: 120px;">
+                <p style="text-align: center;">Knife</p>
+              </div>
+              
+
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+    
+    <script>
+      function changeVideo(videoSrc) {
+        const mainVideo = document.getElementById('main-video');
+        mainVideo.src = videoSrc;
+        mainVideo.muted = true;
+        mainVideo.loop = true;
+        mainVideo.load();
+        mainVideo.play();
+      }
+    </script> 
+    
+
+
+
+    <!-- Footer -->
+    <footer class="footer", style="padding: 40px 0;">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-8">
+            <div class="content">
+              <p style="text-align: center;">
+                This website is designed based on
+                <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+                <br>
+                Thanks for visiting😊!
+                <span id="busuanzi_container_site_pv">
+                  Total Page Views: <span id="busuanzi_value_site_pv"></span>
+                </span>
+                <br>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!--/ Footer -->
+
+  </body>
+</html>

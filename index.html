@@ -262,108 +262,112 @@
     </section>
 
     <script>
-      // HOI Model Viewers
-      const modelViewerHOI0 = document.getElementById('modelViewerHOI0');
-      const modelViewerHOI1 = document.getElementById('modelViewerHOI1');
-      const modelViewerHOI2 = document.getElementById('modelViewerHOI2');
-      const objectNameSelectHOI = document.getElementById('objectNameHOI');
+      document.addEventListener('DOMContentLoaded', function() {
+        // HOI Model Viewers
+        const modelViewerHOI0 = document.getElementById('modelViewerHOI0');
+        const modelViewerHOI1 = document.getElementById('modelViewerHOI1');
+        const modelViewerHOI2 = document.getElementById('modelViewerHOI2');
+        const objectNameSelectHOI = document.getElementById('objectNameHOI');
 
-      // Robot hands to display
-      const robotHands = ['inspire', 'shadowhand', 'leaphand'];
+        // Robot hands to display
+        const robotHands = ['inspire', 'shadowhand', 'leaphand'];
 
-      function updateModelHOI() {
-        const selectedObject = objectNameSelectHOI.value;
-        // Update each model viewer with a different robot hand
-        modelViewerHOI0.src = `static/data/grasp/${robotHands[0]}/${selectedObject}/0.glb`;
-        modelViewerHOI1.src = `static/data/grasp/${robotHands[1]}/${selectedObject}/0.glb`;
-        modelViewerHOI2.src = `static/data/grasp/${robotHands[2]}/${selectedObject}/0.glb`;
-      }
-
-      objectNameSelectHOI.addEventListener('change', updateModelHOI);
-
-      // Initialize with default object
-      updateModelHOI();
-
-      // Functional Grasp Carousel
-      const objectCarousel = document.getElementById('object-carousel');
-      const carouselLeft = document.getElementById('carousel-left');
-      const carouselRight = document.getElementById('carousel-right');
-      
-      const objects = [
-        'axe', 'fire_torch', 'hammer', 'longsword', 'microphone', 'mug',
-        'pen', 'phone', 'power_drill', 'remote', 'soap_bottle', 'spray',
-        'syringe', 'teapot', 'tong', 'whip', 'whisk', 'wine_glass', 'writing_brush'
-      ];
-
-      let currentIndex = 0;
-      const itemsPerView = 4;
-      const itemWidth = 220; // 200px model + 20px gap
-
-      // Create carousel items
-      function createCarouselItems() {
-        objectCarousel.innerHTML = '';
-        objects.forEach((object, index) => {
-          const item = document.createElement('div');
-          item.className = 'carousel-item';
-          item.style.cssText = 'flex: 0 0 200px; display: flex; flex-direction: column; align-items: center; margin-right: 20px;';
-          
-          item.innerHTML = `
-            <model-viewer
-              src="static/data/3dmodel/ShadowHand/${object}/0.glb"
-              alt="${object} Grasp"
-              ar
-              camera-controls
-              auto-rotate
-              auto-rotate-delay="1000"
-              interaction-prompt-threshold="2000"
-              exposure="1.2"
-              shadow-intensity="1"
-              environment-image="neutral"
-              style="width: 200px; height: 200px; border: 3px solid #66c0ff; border-radius: 15px;">
-            </model-viewer>
-            <p style="font-size: 16px; font-weight: bold; margin-top: 10px; text-transform: capitalize;">${object.replace('_', ' ')}</p>
-          `;
-          
-          objectCarousel.appendChild(item);
-        });
-        
-        // Debug: log total items created
-        console.log(`Created ${objects.length} carousel items`);
-      }
-
-
-
-      // Scroll carousel
-      function scrollCarousel(direction) {
-        // Calculate max index to ensure all objects are viewable
-        // For 19 objects with 4 items per view, we need positions 0-15 (16 positions total)
-        const maxIndex = Math.max(0, objects.length - itemsPerView);
-        
-        if (direction === 'left') {
-          currentIndex = Math.max(0, currentIndex - 1);
-        } else if (direction === 'right') {
-          currentIndex = Math.min(maxIndex, currentIndex + 1);
+        function updateModelHOI() {
+          const selectedObject = objectNameSelectHOI.value;
+          // Update each model viewer with a different robot hand
+          const basePath = 'static/data/grasp';
+          modelViewerHOI0.src = `${basePath}/${robotHands[0]}/${selectedObject}/0.glb`;
+          modelViewerHOI1.src = `${basePath}/${robotHands[1]}/${selectedObject}/0.glb`;
+          modelViewerHOI2.src = `${basePath}/${robotHands[2]}/${selectedObject}/0.glb`;
         }
-        // If no direction provided (initialization), keep current index
-        
-        const translateX = -(currentIndex * itemWidth);
-        objectCarousel.style.transform = `translateX(${translateX}px)`;
-        
-        // Update arrow visibility
-        carouselLeft.style.opacity = currentIndex === 0 ? '0.5' : '1';
-        carouselRight.style.opacity = currentIndex === maxIndex ? '0.5' : '1';
-        
-        // Debug info - can be removed later
-        console.log(`Current index: ${currentIndex}, Max index: ${maxIndex}, Total objects: ${objects.length}, Showing objects ${currentIndex + 1}-${Math.min(currentIndex + itemsPerView, objects.length)}`);
-      }
 
-      // Event listeners
-      carouselLeft.addEventListener('click', () => scrollCarousel('left'));
-      carouselRight.addEventListener('click', () => scrollCarousel('right'));
+        if (objectNameSelectHOI) {
+          objectNameSelectHOI.addEventListener('change', updateModelHOI);
+          // Initialize with default object
+          updateModelHOI();
+        }
 
-      // Initialize carousel
-      createCarouselItems();
-      scrollCarousel(); // Initialize arrow states
+        // Functional Grasp Carousel
+        const objectCarousel = document.getElementById('object-carousel');
+        const carouselLeft = document.getElementById('carousel-left');
+        const carouselRight = document.getElementById('carousel-right');
+        
+        if (objectCarousel && carouselLeft && carouselRight) {
+          const objects = [
+            'apple', 'bottle', 'bowl', 'case', 'cup', 'handlebag',
+            'hanger', 'hat', 'ladle', 'mug', 'pan', 'pot',
+            'powerdrill', 'scissors', 'spraybottle', 'sprayer', 'sunglass', 'toothbrush', 'umbrella', 'wineglass'
+          ];
+
+          let currentIndex = 0;
+          const itemsPerView = 4;
+          const itemWidth = 220; // 200px model + 20px gap
+
+          // Create carousel items
+          function createCarouselItems() {
+            objectCarousel.innerHTML = '';
+            objects.forEach((object, index) => {
+              const item = document.createElement('div');
+              item.className = 'carousel-item';
+              item.style.cssText = 'flex: 0 0 200px; display: flex; flex-direction: column; align-items: center; margin-right: 20px;';
+              
+              item.innerHTML = `
+                <model-viewer
+                  src="static/data/grasp/shadowhand/${object}/0.glb"
+                  alt="${object} Grasp"
+                  ar
+                  camera-controls
+                  auto-rotate
+                  auto-rotate-delay="1000"
+                  interaction-prompt-threshold="2000"
+                  exposure="1.2"
+                  shadow-intensity="1"
+                  environment-image="neutral"
+                  style="width: 200px; height: 200px; border: 3px solid #66c0ff; border-radius: 15px;">
+                </model-viewer>
+                <p style="font-size: 16px; font-weight: bold; margin-top: 10px; text-transform: capitalize;">${object.replace('_', ' ')}</p>
+              `;
+              
+              objectCarousel.appendChild(item);
+            });
+            
+            // Debug: log total items created
+            console.log(`Created ${objects.length} carousel items`);
+          }
+
+          // Scroll carousel
+          function scrollCarousel(direction) {
+            // Calculate max index to ensure all objects are viewable
+            // For 19 objects with 4 items per view, we need positions 0-15 (16 positions total)
+            const maxIndex = Math.max(0, objects.length - itemsPerView);
+            
+            if (direction === 'left') {
+              currentIndex = Math.max(0, currentIndex - 1);
+            } else if (direction === 'right') {
+              currentIndex = Math.min(maxIndex, currentIndex + 1);
+            }
+            // If no direction provided (initialization), keep current index
+            
+            const translateX = -(currentIndex * itemWidth);
+            objectCarousel.style.transform = `translateX(${translateX}px)`;
+            
+            // Update arrow visibility
+            carouselLeft.style.opacity = currentIndex === 0 ? '0.5' : '1';
+            carouselRight.style.opacity = currentIndex === maxIndex ? '0.5' : '1';
+            
+            // Debug info - can be removed later
+            console.log(`Current index: ${currentIndex}, Max index: ${maxIndex}, Total objects: ${objects.length}, Showing objects ${currentIndex + 1}-${Math.min(currentIndex + itemsPerView, objects.length)}`);
+          }
+
+          // Event listeners
+          carouselLeft.addEventListener('click', () => scrollCarousel('left'));
+          carouselRight.addEventListener('click', () => scrollCarousel('right'));
+
+          // Initialize carousel
+          createCarouselItems();
+          scrollCarousel(); // Initialize arrow states
+        }
+      });
     </script>
     <!--/ Simulation Grasps -->
 

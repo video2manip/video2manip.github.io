@@ -115,6 +115,18 @@
 
 
     
+    <!-- Grasp Demo Video -->
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body">
+          <video id="grasp-demo" controls playsinline height="100%" class="video-with-border">
+            <source src="static/data/grasp/grasp_demo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </section>
+
     <!-- Reconstruction Grasps -->
     <section class="section">
       <div class="container is-max-desktop">
@@ -371,7 +383,7 @@
     </script>
     <!--/ Simulation Grasps -->
 
-     <!-- Partial Observation Grasps -->
+    <!-- Partial Observation Grasps -->
 
     <!--/ Partial Observation Grasps -->
 
@@ -380,24 +392,38 @@
         <div class="columns is-centered">
           <div class="column">
             <h2 class="title is-3 has-text-centered">Real-world Demos</h2>
-            <p class="has-text-centered" style="margin-top: -10px; margin-bottom: 20px; font-style: italic;">All videos are sped up by 2.25 times</p>
+            <p class="has-text-centered" style="margin-top: -10px; margin-bottom: 20px; font-style: italic;">All videos are sped up by 2 times</p>
           </div>
         </div>
     
         <div class="columns is-centered has-text-centered">
-          <section class="video-section" style="display: flex; padding: 20px;">
-            <div class="main-video-container" style="flex: 2; margin-top: 25px; margin-right: 50px; text-align: center;">
-              <video id="main-video" autoplay muted loop playsinline style="width: 700px;" class="video-with-border">
-                <source src="static/data/realworld/tong.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          
-            <div class="covers-container" style="flex: 1; overflow-y: auto; height: 600px; display: flex; flex-direction: column; align-items: center;">
-              <div class="video-cover" onclick="changeVideo('static/data/realworld/wine_glass.mp4')" style="margin-bottom: 10px; cursor: pointer;">
-                <img src="static/data/realworld/wine_glass.png" alt="wine glass Cover" style="width: 120px; height: 120px;">
-                <p style="text-align: center;">Wine Glass</p>
+          <div class="column is-fullwidth">
+            <div class="manip-videos-container" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+              <!-- Control Panel (Horizontal) -->
+              <div class="manip-control-panel" style="width: 100%; max-width: 1200px; margin-bottom: 20px; padding: 15px; background-color: #f5f5f5; border-radius: 10px; display: flex; justify-content: center; align-items: center;">
+                <label for="manipTaskSelect" style="font-size: 18px; font-weight: bold; margin-right: 15px;">Select Task:</label>
+                <select id="manipTaskSelect" class="custom-select" style="width: 250px; padding: 8px; font-size: 16px; border-radius: 5px; border: 2px solid #66c0ff;">
+                  <option value="pourtea">Pour Tea</option>
+                  <option value="pickplace_bottle">Pick Place Bottle</option>
+                </select>
               </div>
+              
+              <!-- Three Videos in a Row -->
+              <div class="manip-videos-row" style="display: flex; flex-direction: row; gap: 15px; justify-content: center; align-items: center; width: 100%; max-width: 100vw; padding: 0 15px;">
+                <video id="manip-video-1" autoplay muted loop playsinline controls style="width: calc((100vw - 60px) / 3); max-width: calc((1200px - 30px) / 3); height: auto; min-height: 400px;" class="video-with-border">
+                  <source src="static/data/manip/pourtea/pourtea_1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <video id="manip-video-2" autoplay muted loop playsinline controls style="width: calc((100vw - 60px) / 3); max-width: calc((1200px - 30px) / 3); height: auto; min-height: 400px;" class="video-with-border">
+                  <source src="static/data/manip/pourtea/pourtea_2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <video id="manip-video-3" autoplay muted loop playsinline controls style="width: calc((100vw - 60px) / 3); max-width: calc((1200px - 30px) / 3); height: auto; min-height: 400px;" class="video-with-border">
+                  <source src="static/data/manip/pourtea/pourtea_3.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
             
               <div class="video-cover" onclick="changeVideo('static/data/realworld/tong.mp4')" style="margin-bottom: 10px; cursor: pointer;">
                 <img src="static/data/realworld/tong.png" alt="tong Cover" style="width: 120px; height: 120px;">
@@ -418,43 +444,6 @@
                 <img src="static/data/realworld/mug.png" alt="Mug Cover" style="width: 120px; height: 120px;">
                 <p style="text-align: center;">Mug</p>
               </div>
-
-              <div class="video-cover" onclick="changeVideo('static/data/realworld/microphone.mp4')" style="margin-bottom: 10px; cursor: pointer;">
-                <img src="static/data/realworld/microphone.png" alt="Microphone Cover" style="width: 120px; height: 120px;">
-                <p style="text-align: center;">Microphone</p>
-              </div>
-              
-              <div class="video-cover" onclick="changeVideo('static/data/realworld/spray.mp4')" style="margin-bottom: 10px; cursor: pointer;">
-                <img src="static/data/realworld/spray.png" alt="Spray Cover" style="width: 120px; height: 120px;">
-                <p style="text-align: center;">Spray</p>
-              </div>
-            
-              <div class="video-cover" onclick="changeVideo('static/data/realworld/syringe.mp4')" style="margin-bottom: 10px; cursor: pointer;">
-                <img src="static/data/realworld/syringe.png" alt="Syringe Cover" style="width: 120px; height: 120px;">
-                <p style="text-align: center;">Syringe</p>
-              </div>
-
-              <div class="video-cover" onclick="changeVideo('static/data/realworld/bowl.mp4')" style="margin-bottom: 10px; cursor: pointer;">
-                <img src="static/data/realworld/bowl.jpg" alt="Bowl Cover" style="width: 120px; height: 120px;">
-                <p style="text-align: center;">Bowl</p>
-              </div>
-
-              <div class="video-cover" onclick="changeVideo('static/data/realworld/plate.mp4')" style="margin-bottom: 10px; cursor: pointer;">
-                <img src="static/data/realworld/plate.png" alt="Plate Cover" style="width: 120px; height: 120px;">
-                <p style="text-align: center;">Plate</p>
-              </div>
-
-              <div class="video-cover" onclick="changeVideo('static/data/realworld/fork.mp4')" style="margin-bottom: 10px; cursor: pointer;">
-                <img src="static/data/realworld/fork.jpg" alt="Fork Cover" style="width: 120px; height: 120px;">
-                <p style="text-align: center;">Fork</p>
-              </div>
-
-              <div class="video-cover" onclick="changeVideo('static/data/realworld/knife.mp4')" style="margin-bottom: 10px; cursor: pointer;">
-                <img src="static/data/realworld/knife.jpg" alt="Knife Cover" style="width: 120px; height: 120px;">
-                <p style="text-align: center;">Knife</p>
-              </div>
-              
-
             </div>
           </section>
         </div>
@@ -470,6 +459,55 @@
         mainVideo.load();
         mainVideo.play();
       }
+
+      // Manip videos task selection
+      document.addEventListener('DOMContentLoaded', function() {
+        const manipTaskSelect = document.getElementById('manipTaskSelect');
+        const manipVideo1 = document.getElementById('manip-video-1');
+        const manipVideo2 = document.getElementById('manip-video-2');
+        const manipVideo3 = document.getElementById('manip-video-3');
+
+        // Task video configurations
+        const taskVideos = {
+          'pourtea': [
+            'static/data/manip/pourtea/pourtea_1.mp4',
+            'static/data/manip/pourtea/pourtea_2.mp4',
+            'static/data/manip/pourtea/pourtea_3.mp4'
+          ],
+          'pickplace_bottle': [
+            'static/data/manip/pickplace_bottle.mp4',
+            'static/data/manip/pickplace_bottle.mp4',
+            'static/data/manip/pickplace_bottle.mp4'
+          ]
+        };
+
+        function updateManipVideos() {
+          const selectedTask = manipTaskSelect.value;
+          const videos = taskVideos[selectedTask];
+          
+          if (videos && videos.length >= 3) {
+            manipVideo1.src = videos[0];
+            manipVideo2.src = videos[1];
+            manipVideo3.src = videos[2];
+            
+            // Reload and autoplay videos
+            manipVideo1.load();
+            manipVideo2.load();
+            manipVideo3.load();
+            
+            // Ensure autoplay after load
+            manipVideo1.play().catch(e => console.log('Autoplay prevented:', e));
+            manipVideo2.play().catch(e => console.log('Autoplay prevented:', e));
+            manipVideo3.play().catch(e => console.log('Autoplay prevented:', e));
+          }
+        }
+
+        if (manipTaskSelect) {
+          manipTaskSelect.addEventListener('change', updateManipVideos);
+          // Initialize with default task
+          updateManipVideos();
+        }
+      });
     </script> 
     
 

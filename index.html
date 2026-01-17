@@ -400,19 +400,16 @@
           <div class="column is-fullwidth">
             <div class="manip-videos-container" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
               <!-- Control Panel (Horizontal) -->
-              <div class="manip-control-panel" style="width: 100%; max-width: 1200px; margin-bottom: 20px; padding: 15px; background-color: #f5f5f5; border-radius: 10px; display: flex; justify-content: center; align-items: center;">
-                <label for="manipTaskSelect" style="font-size: 18px; font-weight: bold; margin-right: 15px;">Select Task:</label>
-                <select id="manipTaskSelect" class="custom-select" style="width: 250px; padding: 8px; font-size: 16px; border-radius: 5px; border: 2px solid #66c0ff;">
-                  <option value="pourtea">Pour Tea</option>
-                  <option value="placebottle">Place Bottle</option>
-                  <option value="closedrawer">Close Drawer</option>
-                  <option value="sprayclean">Spray Clean</option>
-                  <option value="fixed_scoop">Fixed Scoop</option>
-                  <option value="move_scoop">Move Scoop</option>
-                  <option value="fixed_rollerclean">Fixed Roller Clean</option>
-                  <option value="move_rollerclean">Move Roller Clean</option>
-                  <option value="rotatebulb">Rotate Bulb</option>
-                  <option value="generated_video">Generated Video</option>
+              <div class="manip-control-panel" style="width: 100%; max-width: 1200px; margin-bottom: 20px; padding: 15px; background-color: #f5f5f5; border-radius: 10px; display: flex; justify-content: center; align-items: center; gap: 20px;">
+                <label for="manipCategorySelect" style="font-size: 18px; font-weight: bold;">Select Category:</label>
+                <select id="manipCategorySelect" class="custom-select" style="width: 200px; padding: 8px; font-size: 16px; border-radius: 5px; border: 2px solid #66c0ff;">
+                  <option value="generated_videos">Generated Videos</option>
+                  <option value="in_the_scene">In The Scene</option>
+                  <option value="in_the_wild">In The Wild</option>
+                </select>
+                <label for="manipTaskSelect" style="font-size: 18px; font-weight: bold;">Select Task:</label>
+                <select id="manipTaskSelect" class="custom-select" style="width: 200px; padding: 8px; font-size: 16px; border-radius: 5px; border: 2px solid #66c0ff;">
+                  <option value="">-- Select Category First --</option>
                 </select>
               </div>
               
@@ -473,6 +470,7 @@
 
       // Manip videos task selection
       document.addEventListener('DOMContentLoaded', function() {
+        const manipCategorySelect = document.getElementById('manipCategorySelect');
         const manipTaskSelect = document.getElementById('manipTaskSelect');
         // First row videos: RGB and Projection
         const manipVideoRgb = document.getElementById('manip-video-rgb');
@@ -484,150 +482,88 @@
         const manipVideo1 = document.getElementById('manip-video-1');
         const manipVideo2 = document.getElementById('manip-video-2');
 
-        // Task video configurations
-        // Each task has: row1: [rgb, projection], row2: [human, robot], row3: [case1, case2]
-        const taskVideos = {
-          'pourtea': {
-            row1: [
-              'static/data/manip/pourtea/rgb.mp4',
-              'static/data/manip/pourtea/projection.mp4'
-            ],
-            row2: [
-              'static/data/manip/pourtea/human.mp4',
-              'static/data/manip/pourtea/robot.mp4'
-            ],
-            row3: [
-              'static/data/manip/pourtea/pourtea_1.mp4',
-              'static/data/manip/pourtea/pourtea_2.mp4'
-            ]
-          },
-          'placebottle': {
-            row1: [
-              'static/data/manip/placebottle/rgb.mp4',
-              'static/data/manip/placebottle/projection.mp4'
-            ],
-            row2: [
-              'static/data/manip/placebottle/human.mp4',
-              'static/data/manip/placebottle/robot.mp4'
-            ],
-            row3: [
-              'static/data/manip/placebottle/placebottle_1.mp4',
-              'static/data/manip/placebottle/placebottle_2.mp4'
-            ]
-          },
-          'closedrawer': {
-            row1: [
-              'static/data/manip/closedrawer/rgb.mp4',
-              'static/data/manip/closedrawer/projection.mp4'
-            ],
-            row2: [
-              'static/data/manip/closedrawer/human.mp4',
-              'static/data/manip/closedrawer/robot.mp4'
-            ],
-            row3: [
-              'static/data/manip/closedrawer/closedrawer_1.mp4',
-              'static/data/manip/closedrawer/closedrawer_2.mp4'
-            ]
-          },
-          'sprayclean': {
-            row1: [
-              'static/data/manip/sprayclean/rgb.mp4',
-              'static/data/manip/sprayclean/projection.mp4'
-            ],
-            row2: [
-              'static/data/manip/sprayclean/human.mp4',
-              'static/data/manip/sprayclean/robot.mp4'
-            ],
-            row3: [
-              'static/data/manip/sprayclean/rgb.mp4',
-              'static/data/manip/sprayclean/robot.mp4'
-            ]
-          },
-          'fixed_scoop': {
-            row1: [
-              'static/data/manip/fixed_scoop/rgb.mp4',
-              'static/data/manip/fixed_scoop/projection.mp4'
-            ],
-            row2: [
-              'static/data/manip/fixed_scoop/human.mp4',
-              'static/data/manip/fixed_scoop/robot.mp4'
-            ],
-            row3: [
-              'static/data/manip/fixed_scoop/rgb.mp4',
-              'static/data/manip/fixed_scoop/robot.mp4'
-            ]
-          },
-          'move_scoop': {
-            row1: [
-              'static/data/manip/move_scoop/rgb.mp4',
-              'static/data/manip/move_scoop/projection.mp4'
-            ],
-            row2: [
-              'static/data/manip/move_scoop/human.mp4',
-              'static/data/manip/move_scoop/robot.mp4'
-            ],
-            row3: [
-              'static/data/manip/move_scoop/rgb.mp4',
-              'static/data/manip/move_scoop/robot.mp4'
-            ]
-          },
-          'fixed_rollerclean': {
-            row1: [
-              'static/data/manip/fixed_rollerclean/rgb.mp4',
-              'static/data/manip/fixed_rollerclean/projection.mp4'
-            ],
-            row2: [
-              'static/data/manip/fixed_rollerclean/human.mp4',
-              'static/data/manip/fixed_rollerclean/robot.mp4'
-            ],
-            row3: [
-              'static/data/manip/fixed_rollerclean/rgb.mp4',
-              'static/data/manip/fixed_rollerclean/robot.mp4'
-            ]
-          },
-          'move_rollerclean': {
-            row1: [
-              'static/data/manip/move_rollerclean/rgb.mp4',
-              'static/data/manip/move_rollerclean/projection.mp4'
-            ],
-            row2: [
-              'static/data/manip/move_rollerclean/human.mp4',
-              'static/data/manip/move_rollerclean/robot.mp4'
-            ],
-            row3: [
-              'static/data/manip/move_rollerclean/rgb.mp4',
-              'static/data/manip/move_rollerclean/robot.mp4'
-            ]
-          },
-          'rotatebulb': {
-            row1: [
-              'static/data/manip/rotatebulb/rgb.mp4',
-              'static/data/manip/rotatebulb/projection.mp4'
-            ],
-            row2: [
-              'static/data/manip/rotatebulb/human.mp4',
-              'static/data/manip/rotatebulb/robot_inspire.mp4'
-            ],
-            row3: [
-              'static/data/manip/rotatebulb/rgb.mp4',
-              'static/data/manip/rotatebulb/robot_leap.mp4'
-            ]
-          },
-          'generated_video': {
-            row1: [
-              'static/data/manip/generated_video/rgb.mp4',
-              'static/data/manip/generated_video/projection.mp4'
-            ],
-            row2: [
-              'static/data/manip/generated_video/human.mp4',
-              'static/data/manip/generated_video/robot.mp4'
-            ],
-            row3: [
-              'static/data/manip/generated_video/rgb.mp4',
-              'static/data/manip/generated_video/robot.mp4'
-            ]
-          }
+        // Category to tasks mapping
+        const categoryTasks = {
+          'generated_videos': ['jenga_move', 'pourtea'],
+          'in_the_scene': ['closedrawer', 'placebottle', 'pourtea'],
+          'in_the_wild': ['pourtea']
         };
+
+        // Task display names
+        const taskDisplayNames = {
+          'jenga_move': 'Jenga Move',
+          'pourtea': 'Pour Tea',
+          'closedrawer': 'Close Drawer',
+          'placebottle': 'Place Bottle'
+        };
+
+        // Helper function to get video paths
+        function getVideoPaths(category, task) {
+          const basePath = `static/data/manip/${category}/${task}`;
+          // Default case videos
+          let case1 = `${basePath}/${task}_1.mp4`;
+          let case2 = `${basePath}/${task}_2.mp4`;
+          
+          // Special handling for tasks with different case video names
+          if (task === 'jenga_move') {
+            case1 = `${basePath}/jenga_move_1.mp4`;
+            case2 = `${basePath}/jenga_move_2.mp4`;
+          } else if (task === 'pourtea' && category === 'generated_videos') {
+            // generated_videos/pourtea only has pourtea_1, use rgb as fallback for case2
+            case1 = `${basePath}/pourtea_1.mp4`;
+            case2 = `${basePath}/rgb.mp4`;
+          } else if (task === 'placebottle' && category === 'in_the_scene') {
+            // in_the_scene/placebottle has placebottle_1, placebottle_2, placebottle_3
+            case1 = `${basePath}/placebottle_1.mp4`;
+            case2 = `${basePath}/placebottle_2.mp4`;
+          }
+          
+          return {
+            row1: [
+              `${basePath}/rgb.mp4`,
+              `${basePath}/projection.mp4`
+            ],
+            row2: [
+              `${basePath}/human.mp4`,
+              `${basePath}/robot.mp4`
+            ],
+            row3: [
+              case1,
+              case2
+            ]
+          };
+        }
+
+        // Function to populate task dropdown based on category
+        function populateTaskDropdown(category) {
+          manipTaskSelect.innerHTML = '';
+          if (!category || !categoryTasks[category]) {
+            manipTaskSelect.innerHTML = '<option value="">-- Select Category First --</option>';
+            return;
+          }
+          
+          const tasks = categoryTasks[category];
+          tasks.forEach(task => {
+            const option = document.createElement('option');
+            option.value = task;
+            option.textContent = taskDisplayNames[task] || task;
+            manipTaskSelect.appendChild(option);
+          });
+        }
+
+        // Category change handler
+        function handleCategoryChange() {
+          const category = manipCategorySelect.value;
+          populateTaskDropdown(category);
+          manipTaskSelect.value = '';
+          // Clear videos when category changes
+          if (manipVideoRgb) manipVideoRgb.src = '';
+          if (manipVideoProjection) manipVideoProjection.src = '';
+          if (manipVideoHuman) manipVideoHuman.src = '';
+          if (manipVideoRobot) manipVideoRobot.src = '';
+          if (manipVideo1) manipVideo1.src = '';
+          if (manipVideo2) manipVideo2.src = '';
+        }
 
         function updateVideoSource(videoElement, videoSrc) {
           // Remove all existing source elements
@@ -657,8 +593,14 @@
         }
 
         function updateManipVideos() {
+          const selectedCategory = manipCategorySelect.value;
           const selectedTask = manipTaskSelect.value;
-          const videos = taskVideos[selectedTask];
+          
+          if (!selectedCategory || !selectedTask) {
+            return;
+          }
+          
+          const videos = getVideoPaths(selectedCategory, selectedTask);
           
           if (videos && videos.row1 && videos.row2 && videos.row3) {
             // Update first row (RGB and Projection)
@@ -685,10 +627,15 @@
           }
         }
 
+        // Event listeners
+        if (manipCategorySelect) {
+          manipCategorySelect.addEventListener('change', handleCategoryChange);
+          // Initialize task dropdown with first category
+          populateTaskDropdown(manipCategorySelect.value);
+        }
+        
         if (manipTaskSelect) {
           manipTaskSelect.addEventListener('change', updateManipVideos);
-          // Initialize with default task
-          updateManipVideos();
         }
       });
     </script> 

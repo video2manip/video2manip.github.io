@@ -486,7 +486,14 @@
         const categoryTasks = {
           'generated_videos': ['jenga_move', 'pourtea'],
           'in_the_scene': ['closedrawer', 'placebottle', 'pourtea'],
-          'in_the_wild': ['pourtea']
+          'in_the_wild': ['pourtea', 'hang']
+        };
+
+        // Default task for each category (first task in the list)
+        const defaultTasks = {
+          'generated_videos': 'jenga_move',
+          'in_the_scene': 'closedrawer',
+          'in_the_wild': 'pourtea'
         };
 
         // Task display names
@@ -494,7 +501,8 @@
           'jenga_move': 'Jenga Move',
           'pourtea': 'Pour Tea',
           'closedrawer': 'Close Drawer',
-          'placebottle': 'Place Bottle'
+          'placebottle': 'Place Bottle',
+          'hang': 'Hang'
         };
 
         // Helper function to get video paths
@@ -535,7 +543,7 @@
         }
 
         // Function to populate task dropdown based on category
-        function populateTaskDropdown(category) {
+        function populateTaskDropdown(category, selectDefault = true) {
           manipTaskSelect.innerHTML = '';
           if (!category || !categoryTasks[category]) {
             manipTaskSelect.innerHTML = '<option value="">-- Select Category First --</option>';
@@ -549,20 +557,31 @@
             option.textContent = taskDisplayNames[task] || task;
             manipTaskSelect.appendChild(option);
           });
+          
+          // Select default task if specified
+          if (selectDefault && defaultTasks[category]) {
+            manipTaskSelect.value = defaultTasks[category];
+          }
         }
 
         // Category change handler
         function handleCategoryChange() {
           const category = manipCategorySelect.value;
-          populateTaskDropdown(category);
-          manipTaskSelect.value = '';
-          // Clear videos when category changes
-          if (manipVideoRgb) manipVideoRgb.src = '';
-          if (manipVideoProjection) manipVideoProjection.src = '';
-          if (manipVideoHuman) manipVideoHuman.src = '';
-          if (manipVideoRobot) manipVideoRobot.src = '';
-          if (manipVideo1) manipVideo1.src = '';
-          if (manipVideo2) manipVideo2.src = '';
+          populateTaskDropdown(category, true); // Select default task
+          // Automatically update videos with default task
+          if (defaultTasks[category]) {
+            setTimeout(() => {
+              updateManipVideos();
+            }, 100);
+          } else {
+            // Clear videos if no default task
+            if (manipVideoRgb) manipVideoRgb.src = '';
+            if (manipVideoProjection) manipVideoProjection.src = '';
+            if (manipVideoHuman) manipVideoHuman.src = '';
+            if (manipVideoRobot) manipVideoRobot.src = '';
+            if (manipVideo1) manipVideo1.src = '';
+            if (manipVideo2) manipVideo2.src = '';
+          }
         }
 
         function updateVideoSource(videoElement, videoSrc) {
@@ -630,8 +649,15 @@
         // Event listeners
         if (manipCategorySelect) {
           manipCategorySelect.addEventListener('change', handleCategoryChange);
-          // Initialize task dropdown with first category
-          populateTaskDropdown(manipCategorySelect.value);
+          // Initialize task dropdown with first category and default task
+          const initialCategory = manipCategorySelect.value;
+          populateTaskDropdown(initialCategory, true);
+          // Load default task videos on page load
+          if (defaultTasks[initialCategory]) {
+            setTimeout(() => {
+              updateManipVideos();
+            }, 200);
+          }
         }
         
         if (manipTaskSelect) {
